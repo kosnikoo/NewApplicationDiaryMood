@@ -78,6 +78,15 @@ namespace UI
                 OnPropertyChanged();
             }
         }
+        public PlotModel? MoodPlotModel
+        {
+            get => _moodPlotModel;
+            set
+            {
+                _moodPlotModel = value;
+                OnPropertyChanged();
+            }
+        }
         // Реализация интерфейса
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -130,7 +139,7 @@ namespace UI
             }
             plotModel.Series.Add(barSeries);
 
-            _moodPlotModel = plotModel;
+            MoodPlotModel = plotModel;
         }
         private void LoadMonthChart(MoodFilter filter)
         {

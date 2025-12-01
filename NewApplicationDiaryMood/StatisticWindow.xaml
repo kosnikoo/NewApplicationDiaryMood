@@ -36,7 +36,12 @@ Margin="10,0,0,0" Click="ResetFilterButton_Click"/>
         </StackPanel>
         <!-- Контейнер для диаграмм -->
         <TabControl Grid.Row="2">
-            <oxy:PlotView Model="{Binding MasterPlotModel}" />
+            <TabItem Header="По месяцам">
+                <oxy:PlotView Model="{Binding MonthPlotModel}" />
+            </TabItem>
+            <TabItem Header="По настроениям">
+                <oxy:PlotView Model="{Binding MoodPlotModel}" />
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
