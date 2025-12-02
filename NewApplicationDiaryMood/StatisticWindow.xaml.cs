@@ -25,14 +25,12 @@ namespace UI
     {
 
         private readonly StaticsService _statisticsService;
-        // Backing fields для свойств
         private DateTime? _startDate;
         private DateTime? _endDate;
         private PlotModel? _statusPlotModel;
         private PlotModel? _masterPlotModel;
         private PlotModel? _monthPlotModel;
         private PlotModel? _moodPlotModel;
-        // Свойства с уведомлением
         public DateTime? StartDate
         {
             get => _startDate;
@@ -87,7 +85,6 @@ namespace UI
                 OnPropertyChanged();
             }
         }
-        // Реализация интерфейса
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -96,43 +93,38 @@ namespace UI
 
         private void LoadMoodChart(MoodFilter filter)
         {
-            // 1. Получаем данные из сервиса
             var data = _statisticsService.GetByMood(filter);
 
-            // 2. Создаём модель диаграммы
             var plotModel = new PlotModel { Title = "" };
 
-            // 3. Создаём ось категорий (для текстовых меток)
             var categoryAxis = new CategoryAxis
             {
-                Position = AxisPosition.Left, // Слева для горизонтальных столбцов
+                Position = AxisPosition.Left,
                 Title = "Типы настроения"
             };
 
-            // 4. Заполняем метки оси (важно: в том же порядке, что и данные!)
             foreach (var item in data)
             {
                 categoryAxis.Labels.Add(item.MoodName);
             }
             plotModel.Axes.Add(categoryAxis);
 
-            // 5. Создаём числовую ось (для значений)
             plotModel.Axes.Add(new LinearAxis
             {
-                Position = AxisPosition.Bottom, // Снизу для значений
+                Position = AxisPosition.Bottom,
                 Title = "Количество записей",
                 MinimumPadding = 0.1,
                 MaximumPadding = 0.1
             });
 
-            // 6. Создаём серию столбцов
+
             var barSeries = new BarSeries
             {
                 Title = "Количество записей",
-                FillColor = OxyColor.FromRgb(79, 129, 189) // Цвет столбцов
+                FillColor = OxyColor.FromRgb(79, 129, 189) 
             };
 
-            // 7. Заполняем столбцы данными (порядок должен совпадать с Labels)
+
             foreach (var item in data)
             {
                 barSeries.Items.Add(new BarItem { Value = item.Count });
@@ -144,22 +136,20 @@ namespace UI
         private void LoadMonthChart(MoodFilter filter)
         {
             var data = _statisticsService.GetMoodByMonth(filter);
-            // 2. Создаём модель диаграммы
+
             var plotModel = new PlotModel { Title = "" };
-            // 3. Создаём ось времени (категорий) снизу
+
             var categoryAxis = new CategoryAxis
             {
                 Position = AxisPosition.Bottom,
-                Angle = -15, // Поворот меток для лучшей читаемости
+                Angle = -15, 
                 Title = "Месяцы"
             };
-            // 4. Заполняем метки оси
             foreach (var item in data)
             {
-                categoryAxis.Labels.Add(item.GetMonthName()); // "Янв 2025", "Фев 2025"...
+                categoryAxis.Labels.Add(item.GetMonthName());
             }
             plotModel.Axes.Add(categoryAxis);
-            // 5. Создаём числовую ось (значений) слева
             plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Left,
@@ -167,16 +157,15 @@ namespace UI
                 MinimumPadding = 0.1,
                 MaximumPadding = 0.1
             });
-            // 6. Создаём серию линий
+
             var lineSeries = new LineSeries
             {
                 Title = "Количество записей",
                 Color = OxyColor.FromRgb(79, 129, 189),
-                MarkerType = MarkerType.Circle, // Форма маркеров на точках
+                MarkerType = MarkerType.Circle,
                 MarkerSize = 4,
                 MarkerFill = OxyColor.FromRgb(79, 129, 189)
             };
-            // 7. Добавляем точки на график (x = индекс, y = значение)
             for (int i = 0; i < data.Count; i++)
             {
                 lineSeries.Points.Add(new DataPoint(i, data[i].Count));

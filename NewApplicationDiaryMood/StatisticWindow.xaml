@@ -13,12 +13,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- Заголовок -->
         <TextBlock Grid.Row="0" Text="Статистика записей"
 
 FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
-
-        <!-- Панель фильтрации -->
+        
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
             <TextBlock Text="Период с:" VerticalAlignment="Center" Margin="0,0,5,0"/>
             <DatePicker SelectedDate="{Binding StartDate}"
@@ -34,7 +32,6 @@ Click="ApplyFilterButton_Click"/>
 Margin="10,0,0,0" Click="ResetFilterButton_Click"/>
 
         </StackPanel>
-        <!-- Контейнер для диаграмм -->
         <TabControl Grid.Row="2">
             <TabItem Header="По месяцам">
                 <oxy:PlotView Model="{Binding MonthPlotModel}" />

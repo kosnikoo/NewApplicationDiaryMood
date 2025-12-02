@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{779087F2-0381-4B80-B255-703348038826}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServer", "SqlServer\SqlServer.csproj", "{ABA460FB-10A2-4921-A0B8-D8017BD218E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{779087F2-0381-4B80-B255-703348038826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{779087F2-0381-4B80-B255-703348038826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{779087F2-0381-4B80-B255-703348038826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA460FB-10A2-4921-A0B8-D8017BD218E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA460FB-10A2-4921-A0B8-D8017BD218E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA460FB-10A2-4921-A0B8-D8017BD218E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA460FB-10A2-4921-A0B8-D8017BD218E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
