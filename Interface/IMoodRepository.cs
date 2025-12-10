@@ -11,7 +11,7 @@ namespace Interface
     public interface IMoodRepository
     {
         List<Mood> GetAll(MoodFilter filter);
-        void NewSeedData();
+        //void NewSeedData();
         //int AddMood();
     }
 }

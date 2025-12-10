@@ -16,6 +16,7 @@
     <ProjectReference Include="..\InMemory\InMemory.csproj" />
     <ProjectReference Include="..\Interface\Interface.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\SqlServer\SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

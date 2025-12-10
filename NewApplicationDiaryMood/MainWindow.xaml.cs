@@ -22,7 +22,7 @@ namespace UI
         {
             InitializeComponent();
             _moodRepository = new MoodRepository();
-            _moodRepository.NewSeedData();
+            //_moodRepository.NewSeedData();
         }
         private void StatisticsButton_Click(object sender, RoutedEventArgs e)
         {

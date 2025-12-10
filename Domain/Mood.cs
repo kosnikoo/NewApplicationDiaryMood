@@ -13,5 +13,11 @@ namespace Domain
         public MoodType MoodType { get; set; } = MoodType.None;
         public int MoodQuantity { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
+        public void CopyFrom(Mood other)
+        {
+            MoodType = other.MoodType;
+            MoodQuantity = other.MoodQuantity;
+            Date = other.Date;
+        }
     }
 }
