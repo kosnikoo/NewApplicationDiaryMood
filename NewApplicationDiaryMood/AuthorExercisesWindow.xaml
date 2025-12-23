@@ -6,7 +6,29 @@
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
         Title="AuthorExercisesWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+            <TextBlock Text="Список упражнений" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+            <ListBox x:Name="ExercisesListBox" Height="300" 
+                     SelectionChanged="ExercisesListBox_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock x:Name="ExerciseTitleTextBlock" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock x:Name="ExerciseDescriptionTextBlock" TextWrapping="Wrap" Margin="0,0,0,15"/>
+            <TextBlock x:Name="InstructionsTextBlock" TextWrapping="Wrap" Margin="0,0,0,10"/>
+            <TextBlock x:Name="DurationTextBlock" FontWeight="SemiBold"/>
+        </StackPanel>
     </Grid>
 </Window>

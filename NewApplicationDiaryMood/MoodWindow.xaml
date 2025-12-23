@@ -5,8 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MoodWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Добавление настроения" Height="450" Width="800"
+        WindowStartupLocation="CenterOwner"
+        WindowState="Maximized">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Добавление настроения" 
+                   FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+            <TextBlock Text="Тип настроения:*" FontWeight="SemiBold"/>
+            <ComboBox x:Name="MoodTypeComboBox" Height="30"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,15">
+            <TextBlock Text="Интенсивность (1-10):*" FontWeight="SemiBold"/>
+            <Slider x:Name="IntensitySlider" Minimum="1" Maximum="10" TickFrequency="1" 
+                    IsSnapToTickEnabled="True" Value="5" Height="30"/>
+            <TextBlock x:Name="IntensityValueText" Text="5" HorizontalAlignment="Center" 
+                       FontWeight="Bold" FontSize="14"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Margin="0,0,0,15">
+            <TextBlock Text="Дата и время:*" FontWeight="SemiBold"/>
+            <DatePicker x:Name="DatePicker" Height="30"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Margin="0,0,0,20">
+            <TextBlock Text="Комментарий (необязательно):" FontWeight="SemiBold"/>
+            <TextBox x:Name="CommentTextBox" Height="60" TextWrapping="Wrap" 
+                     VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="5" Text="* - обязательные поля" FontSize="10" Foreground="Gray" 
+                   VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="SaveButton" Content="Сохранить" 
+                    Width="100" Height="35" Background="#4CAF50" Foreground="White" 
+                    FontWeight="Bold" Click="SaveButton_Click" Margin="0,0,10,0"/>
+            <Button x:Name="CancelButton" Content="Отмена" 
+                    Width="80" Height="35" Click="CancelButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

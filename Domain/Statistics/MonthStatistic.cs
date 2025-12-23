@@ -16,5 +16,6 @@ namespace Domain.Statistics
             var date = new DateTime(Year, Month, 1);
             return date.ToString("MMM yyyy");
         }
+
     }
 }

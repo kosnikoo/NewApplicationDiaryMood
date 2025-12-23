@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MoodExercisesWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MoodExercisesWindow" Height="450" Width="800"
+        WindowState="Maximized">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Выбор упражнений по настроению" 
+                   FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <DataGrid Grid.Row="1" x:Name="MoodsDataGrid" AutoGenerateColumns="False" 
+                  IsReadOnly="True" SelectionMode="Single" Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Тип настроения" Binding="{Binding Display}" Width="200"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="300"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="SelectButton" Content="Выбрать" Width="100" Height="35" 
+                    Margin="0,0,10,0" Click="SelectButton_Click"/>
+            <Button x:Name="BackButton" Content="Назад" Width="80" Height="35" 
+                    Click="BackButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

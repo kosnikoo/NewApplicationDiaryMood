@@ -9,15 +9,18 @@ namespace Domain
 {
     public class Mood
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
         public MoodType MoodType { get; set; } = MoodType.None;
         public int MoodQuantity { get; set; }
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime EntryDate { get; set; } = DateTime.Now;
+
         public void CopyFrom(Mood other)
         {
+            UserId = other.UserId;
             MoodType = other.MoodType;
             MoodQuantity = other.MoodQuantity;
-            Date = other.Date;
+            EntryDate = other.EntryDate;
         }
     }
 }

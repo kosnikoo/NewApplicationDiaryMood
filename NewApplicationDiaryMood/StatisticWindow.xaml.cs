@@ -8,31 +8,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace UI
+namespace NewApplicationDiaryMood.UI
 {
     public partial class StatisticWindow : Window, INotifyPropertyChanged
     {
-
         private readonly StaticsService _statisticsService;
-        // Backing fields для свойств
+        private readonly int _userId;
+
         private DateTime? _startDate;
         private DateTime? _endDate;
-        private PlotModel? _statusPlotModel;
-        private PlotModel? _masterPlotModel;
-        private PlotModel? _monthPlotModel;
-        private PlotModel? _moodPlotModel;
-        // Свойства с уведомлением
+        private PlotModel _monthPlotModel;
+        private PlotModel _moodPlotModel;
+
         public DateTime? StartDate
         {
             get => _startDate;
@@ -42,6 +31,7 @@ namespace UI
                 OnPropertyChanged();
             }
         }
+
         public DateTime? EndDate
         {
             get => _endDate;
@@ -51,25 +41,8 @@ namespace UI
                 OnPropertyChanged();
             }
         }
-        public PlotModel? StatusPlotModel
-        {
-            get => _statusPlotModel;
-            set
-            {
-                _statusPlotModel = value;
-                OnPropertyChanged();
-            }
-        }
-        public PlotModel? MasterPlotModel
-        {
-            get => _masterPlotModel;
-            set
-            {
-                _masterPlotModel = value;
-                OnPropertyChanged();
-            }
-        }
-        public PlotModel? MonthPlotModel
+
+        public PlotModel MonthPlotModel
         {
             get => _monthPlotModel;
             set
@@ -78,7 +51,8 @@ namespace UI
                 OnPropertyChanged();
             }
         }
-        public PlotModel? MoodPlotModel
+
+        public PlotModel MoodPlotModel
         {
             get => _moodPlotModel;
             set
@@ -87,125 +61,190 @@ namespace UI
                 OnPropertyChanged();
             }
         }
-        // Реализация интерфейса
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void LoadMoodChart(MoodFilter filter)
-        {
-            // 1. Получаем данные из сервиса
-            var data = _statisticsService.GetByMood(filter);
-
-            // 2. Создаём модель диаграммы
-            var plotModel = new PlotModel { Title = "" };
-
-            // 3. Создаём ось категорий (для текстовых меток)
-            var categoryAxis = new CategoryAxis
-            {
-                Position = AxisPosition.Left, // Слева для горизонтальных столбцов
-                Title = "Типы настроения"
-            };
-
-            // 4. Заполняем метки оси (важно: в том же порядке, что и данные!)
-            foreach (var item in data)
-            {
-                categoryAxis.Labels.Add(item.MoodName);
-            }
-            plotModel.Axes.Add(categoryAxis);
-
-            // 5. Создаём числовую ось (для значений)
-            plotModel.Axes.Add(new LinearAxis
-            {
-                Position = AxisPosition.Bottom, // Снизу для значений
-                Title = "Количество записей",
-                MinimumPadding = 0.1,
-                MaximumPadding = 0.1
-            });
-
-            // 6. Создаём серию столбцов
-            var barSeries = new BarSeries
-            {
-                Title = "Количество записей",
-                FillColor = OxyColor.FromRgb(79, 129, 189) // Цвет столбцов
-            };
-
-            // 7. Заполняем столбцы данными (порядок должен совпадать с Labels)
-            foreach (var item in data)
-            {
-                barSeries.Items.Add(new BarItem { Value = item.Count });
-            }
-            plotModel.Series.Add(barSeries);
-
-            MoodPlotModel = plotModel;
-        }
-        private void LoadMonthChart(MoodFilter filter)
-        {
-            var data = _statisticsService.GetMoodByMonth(filter);
-            // 2. Создаём модель диаграммы
-            var plotModel = new PlotModel { Title = "" };
-            // 3. Создаём ось времени (категорий) снизу
-            var categoryAxis = new CategoryAxis
-            {
-                Position = AxisPosition.Bottom,
-                Angle = -15, // Поворот меток для лучшей читаемости
-                Title = "Месяцы"
-            };
-            // 4. Заполняем метки оси
-            foreach (var item in data)
-            {
-                categoryAxis.Labels.Add(item.GetMonthName()); // "Янв 2025", "Фев 2025"...
-            }
-            plotModel.Axes.Add(categoryAxis);
-            // 5. Создаём числовую ось (значений) слева
-            plotModel.Axes.Add(new LinearAxis
-            {
-                Position = AxisPosition.Left,
-                Title = "Количество записей",
-                MinimumPadding = 0.1,
-                MaximumPadding = 0.1
-            });
-            // 6. Создаём серию линий
-            var lineSeries = new LineSeries
-            {
-                Title = "Количество записей",
-                Color = OxyColor.FromRgb(79, 129, 189),
-                MarkerType = MarkerType.Circle, // Форма маркеров на точках
-                MarkerSize = 4,
-                MarkerFill = OxyColor.FromRgb(79, 129, 189)
-            };
-            // 7. Добавляем точки на график (x = индекс, y = значение)
-            for (int i = 0; i < data.Count; i++)
-            {
-                lineSeries.Points.Add(new DataPoint(i, data[i].Count));
-            }
-            plotModel.Series.Add(lineSeries);
-            MonthPlotModel = plotModel;
-        }
-        private void LoadStatistics()
-        {
-            var filter = new MoodFilter { StartDate = StartDate, EndDate = EndDate };
-            LoadMonthChart(filter);
-            LoadMoodChart(filter);
-        }
-        public StatisticWindow(StaticsService statisticsService)
+        public StatisticWindow(IMoodRepository moodRepository, int userId)
         {
             InitializeComponent();
-            _statisticsService = statisticsService;
+            _statisticsService = new StaticsService(moodRepository);
+            _userId = userId;
+
+            MonthPlotModel = new PlotModel();
+            MoodPlotModel = new PlotModel();
+
+            InitializeDatePickers();
             DataContext = this;
             LoadStatistics();
         }
+
+        private void InitializeDatePickers()
+        {
+            StartDatePicker.SelectedDate = DateTime.Now.AddMonths(-1);
+            EndDatePicker.SelectedDate = DateTime.Now;
+        }
+
+        private void LoadStatistics()
+        {
+            try
+            {
+                var filter = new MoodFilter
+                {
+                    StartDate = StartDatePicker.SelectedDate,
+                    EndDate = EndDatePicker.SelectedDate
+                };
+
+                var monthlyStats = _statisticsService.GetMoodByMonth(_userId, filter);
+                var moodStats = _statisticsService.GetByMood(_userId, filter);
+
+                LoadMonthChart(monthlyStats);
+                LoadMoodChart(moodStats);
+
+                MonthlyStatsDataGrid.ItemsSource = monthlyStats.Select(m => new
+                {
+                    m.Year,
+                    m.Month,
+                    MonthName = m.GetMonthName(),
+                    m.Count
+                });
+
+                MoodStatsDataGrid.ItemsSource = moodStats;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки статистики: {ex.Message}");
+            }
+        }
+
+        private void LoadMonthChart(List<Domain.Statistics.MonthStatistic> data)
+        {
+            var plotModel = new PlotModel { Title = "Динамика настроений по месяцам" };
+
+            if (data.Any())
+            {
+                var categoryAxis = new CategoryAxis
+                {
+                    Position = AxisPosition.Bottom,
+                    Angle = -15,
+                    Title = "Месяцы"
+                };
+
+                foreach (var item in data)
+                {
+                    categoryAxis.Labels.Add(item.GetMonthName());
+                }
+                plotModel.Axes.Add(categoryAxis);
+
+                plotModel.Axes.Add(new LinearAxis
+                {
+                    Position = AxisPosition.Left,
+                    Title = "Количество записей",
+                    MinimumPadding = 0.1,
+                    MaximumPadding = 0.1,
+                    Minimum = 0
+                });
+
+                var lineSeries = new LineSeries
+                {
+                    Title = "Количество записей",
+                    Color = OxyColor.FromRgb(79, 129, 189),
+                    MarkerType = MarkerType.Circle,
+                    MarkerSize = 4,
+                    MarkerFill = OxyColor.FromRgb(79, 129, 189)
+                };
+
+                for (int i = 0; i < data.Count; i++)
+                {
+                    lineSeries.Points.Add(new DataPoint(i, data[i].Count));
+                }
+
+                plotModel.Series.Add(lineSeries);
+            }
+            else
+            {
+                plotModel.Title = "Нет данных за выбранный период";
+            }
+
+            MonthPlotModel = plotModel;
+        }
+
+        private void LoadMoodChart(List<Domain.Statistics.MoodStatistic> data)
+        {
+            var plotModel = new PlotModel { Title = "Распределение по типам настроений" };
+
+            if (data.Any())
+            {
+                var categoryAxis = new CategoryAxis
+                {
+                    Position = AxisPosition.Left,
+                    Title = "Типы настроений"
+                };
+
+                var valueAxis = new LinearAxis
+                {
+                    Position = AxisPosition.Bottom,
+                    Title = "Количество записей",
+                    Minimum = 0,
+                    MinorStep = 1,
+                    MajorStep = 1
+                };
+
+                plotModel.Axes.Add(categoryAxis);
+                plotModel.Axes.Add(valueAxis);
+
+                var barSeries = new BarSeries
+                {
+                    Title = "Количество",
+                    FillColor = OxyColor.FromRgb(79, 129, 189),
+                    StrokeColor = OxyColors.Black,
+                    StrokeThickness = 1
+                };
+
+                int index = 0;
+                foreach (var item in data.OrderByDescending(m => m.Count))
+                {
+                    categoryAxis.Labels.Add(item.MoodName);
+                    barSeries.Items.Add(new BarItem(item.Count, index));
+                    index++;
+                }
+
+                plotModel.Series.Add(barSeries);
+            }
+            else
+            {
+                plotModel.Title = "Нет данных за выбранный период";
+            }
+
+            MoodPlotModel = plotModel;
+        }
+
         private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
         {
+            if (StartDatePicker.SelectedDate > EndDatePicker.SelectedDate)
+            {
+                MessageBox.Show("Дата начала не может быть больше даты окончания", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             LoadStatistics();
         }
+
         private void ResetFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            StartDate = null;
-            EndDate = null;
+            StartDatePicker.SelectedDate = DateTime.Now.AddMonths(-1);
+            EndDatePicker.SelectedDate = DateTime.Now;
             LoadStatistics();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

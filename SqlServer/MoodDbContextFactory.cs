@@ -8,9 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-
 namespace SqlServer
 {
     public class MoodDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
@@ -18,15 +15,17 @@ namespace SqlServer
         public AppDbContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.database.json")
-            .Build();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
             return CreateDbContext(configuration);
         }
+
         public AppDbContext CreateDbContext(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext> ();
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseSqlServer(connectionString);
             return new AppDbContext(optionsBuilder.Options);
         }

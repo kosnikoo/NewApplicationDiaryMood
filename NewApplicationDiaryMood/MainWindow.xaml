@@ -1,26 +1,105 @@
-﻿<Window x:Class="UI.MainWindow"
+﻿<Window x:Class="NewApplicationDiaryMood.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Дневник настроения" 
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen">
     <Grid>
-        <TabControl>
-            <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="TabItem" HorizontalAlignment="Left" Margin="-2,-2,0,0" Width="132">
-                <Grid Background="#FFE5E5E5">
-                    <Button Content="Статистика" Width="120" Click="StatisticsButton_Click"/>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="59*"/>
-                        <ColumnDefinition Width="338*"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <Border Grid.Row="0" Background="#4CAF50" Padding="10">
+            <StackPanel>
+                <TextBlock x:Name="WelcomeTextBlock" Text="Дневник настроения" 
+                           FontSize="24" FontWeight="Bold" Foreground="White" 
+                           HorizontalAlignment="Center"/>
+                <TextBlock x:Name="SubscriptionStatusTextBlock" Text="" 
+                           FontSize="12" Foreground="White" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="0,0,1,0">
+                <StackPanel Margin="10">
+                    <Button x:Name="AddMoodButton" Content="➕ Добавить настроение" 
+                            Height="40" Margin="0,5" 
+                            Background="#2196F3" Foreground="White"/>
+
+                    <Button x:Name="StatisticsButton" Content="📊 Статистика" 
+                            Height="40" Margin="0,5"/>
+
+                    <Button x:Name="CoursesButton" Content="🎓 Курсы" 
+                            Height="40" Margin="0,5"/>
+
+                    <Button x:Name="ExercisesButton" Content="💪 Упражнения" 
+                            Height="40" Margin="0,5"/>
+
+                    <Button x:Name="SubscriptionButton" Content="⭐ Подписка" 
+                            Height="40" Margin="0,5"/>
+
+                    <Button x:Name="ProfileButton" Content="👤 Профиль" 
+                            Height="40" Margin="0,5"/>
+                    
+
+                    <Separator Margin="0,20,0,10"/>
+
+                    <TextBlock Text="Последнее настроение:" FontWeight="Bold" Margin="0,5"/>
+                    <TextBlock x:Name="LastMoodText" Text="Не добавлено" FontSize="12"/>
+                    <TextBlock x:Name="LastMoodDate" Text="" FontSize="10" Foreground="Gray"/>
+                    
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="20">
+                <StackPanel>
+                    <TextBlock Text="Добро пожаловать в Дневник настроения!" 
+                               FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                    <Border Background="#E8F5E8" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="📝 Сегодняшнее настроение" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Как вы себя чувствуете сегодня? Добавьте свое настроение, чтобы отслеживать эмоциональное состояние." 
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#E3F2FD" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="📈 Статистика" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Просматривайте статистику своего настроения по месяцам, неделям и типам эмоций." 
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#FFF3E0" CornerRadius="10" Padding="15">
+                        <StackPanel>
+                            <TextBlock Text="🎯 Рекомендации" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Добавьте несколько настроений, чтобы получить персональные рекомендации курсов и упражнений." 
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <StatusBar Grid.Row="2" Background="#E0E0E0">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText" Text="Готово"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock x:Name="UserInfoText" Text=""/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
